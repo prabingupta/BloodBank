@@ -15,58 +15,30 @@ import java.util.List;
 public class SelectionSort {
     public List<BloodModel> sortByDonorId(List<BloodModel> unsortedData, boolean isDesc) {
         
-        List<BloodModel> dataToSort = new ArrayList(); 
-        dataToSort.addAll(unsortedData);
+        List<BloodModel> sortingData = new ArrayList(); 
+        sortingData.addAll(unsortedData);
         
-        for (int i = 0; i < dataToSort.size() - 1; i++) {
+        for (int i = 0; i < sortingData.size() - 1; i++) {
             //min value
             int minIndex = i;
-            for (int j = i + 1; j < dataToSort.size(); j++) {
+            for (int j = i + 1; j < sortingData.size(); j++) {
                 // compare and assign
                 if (isDesc) {
-                    if (dataToSort.get(j).getDonorId() > dataToSort.get(minIndex).getDonorId()) {
+                    if (sortingData.get(j).getDonorId() > sortingData.get(minIndex).getDonorId()) {
                         minIndex = j;
                     }
                 } else {
-                    if (dataToSort.get(j).getDonorId() < dataToSort.get(minIndex).getDonorId()) {
+                    if (sortingData.get(j).getDonorId() < sortingData.get(minIndex).getDonorId()) {
                         minIndex = j;
                     }
                 }
             }
             //swap
-            BloodModel tempDonor = dataToSort.get(minIndex);
-            dataToSort.set(minIndex, dataToSort.get(i));
-            dataToSort.set(i, tempDonor);
+            BloodModel tempDonor = sortingData.get(minIndex);
+            sortingData.set(minIndex, sortingData.get(i));
+            sortingData.set(i, tempDonor);
         }
-        return dataToSort;
+        return sortingData;
     }
     
-     public List<BloodModel> sortByFullName(List<BloodModel> unsortedData, boolean isDesc) {
-        
-        List<BloodModel> dataToSort = new ArrayList(); 
-        dataToSort.addAll(unsortedData);
-        
-        for (int i = 0; i < dataToSort.size() - 1; i++) {
-            //min value
-            int minIndex = i;
-            for (int j = i + 1; j < dataToSort.size(); j++) {
-                // compare and assign
-                if (isDesc) {
-                    if (dataToSort.get(j).getFullName().compareToIgnoreCase(dataToSort.get(minIndex).getFullName())>0 ) {
-                        minIndex = j;
-                    }
-                } else {
-                    if (dataToSort.get(j).getFullName().compareToIgnoreCase(dataToSort.get(minIndex).getFullName())<0) {
-                        minIndex = j;
-                    }
-                }
-            }
-            //swap
-            BloodModel tempDonor = dataToSort.get(minIndex);
-            dataToSort.set(minIndex, dataToSort.get(i));
-            dataToSort.set(i, tempDonor);
-        }
-        return dataToSort;
-    }
-
 }

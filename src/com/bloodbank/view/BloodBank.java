@@ -1,6 +1,5 @@
 package com.bloodbank.view;
 
-
 import javax.swing.JOptionPane;
 import com.bloodbank.model.BloodModel;
 import com.bloodbank.util.ValidationUtil;
@@ -12,8 +11,8 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import com.bloodbank.controller.algorithms.SelectionSort;
 import com.bloodbank.controller.algorithms.BinarySearch;
-
-
+import com.bloodbank.controller.algorithms.InsertionSort;
+import com.bloodbank.controller.algorithms.MergeSort;
 
 
 
@@ -27,9 +26,8 @@ public class BloodBank extends javax.swing.JFrame {
     private List<BloodModel> donorList;
     private java.awt.CardLayout cardLayout;
     private final ValidationUtil validationUtil;
-    private final Color errorColor = new Color(255,51,0);
-    private final Color yellowColor = new Color(239,192,32);
-    private final SelectionSort selectionSort;
+    private final Color errorDarkRed = new Color(139, 0, 0); // Darker shade of red
+    private final Color whiteColor = new Color(255, 255, 255);
 
     
     
@@ -41,11 +39,11 @@ public class BloodBank extends javax.swing.JFrame {
      */
     public BloodBank() {
         initComponents();
-        validationUtil = new ValidationUtil();
-        initializeLayout(); // Setting card layout and adding on screen
-        dataInitialize(); // Initializing data of donor and table 
-        startProgress(); // showing loading screen and initialize progress
-        selectionSort = new SelectionSort();
+       validationUtil = new ValidationUtil();
+        initializePanelLayout(); // Setting card layout and adding on screen
+        toInitializeData(); // Initializing data of donor and table 
+        runProgress(); // showing loading screen and initialize progress
+       
         
     }
 
@@ -58,7 +56,7 @@ public class BloodBank extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlMainScreen = new javax.swing.JPanel();
+        pnlDonorDashBoard = new javax.swing.JPanel();
         pnlMainBar = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
         lblHeadingTitle1 = new javax.swing.JLabel();
@@ -79,30 +77,32 @@ public class BloodBank extends javax.swing.JFrame {
         tblDonor = new javax.swing.JTable();
         lblInfoTable = new javax.swing.JLabel();
         pnlDonorData = new javax.swing.JPanel();
-        lblDonorId = new javax.swing.JLabel();
-        txtfldFullName = new javax.swing.JTextField();
-        lblFullName = new javax.swing.JLabel();
-        txtfldDonorId = new javax.swing.JTextField();
-        lblAge = new javax.swing.JLabel();
-        txtfldBloodGroup = new javax.swing.JTextField();
-        txtfldAge = new javax.swing.JTextField();
-        lblContact = new javax.swing.JLabel();
-        lblBloodGroup = new javax.swing.JLabel();
-        txtfldContact = new javax.swing.JTextField();
-        lblEmail = new javax.swing.JLabel();
-        txtfldAddress = new javax.swing.JTextField();
-        lblAddress = new javax.swing.JLabel();
-        txtfldEmail = new javax.swing.JTextField();
-        lblGender = new javax.swing.JLabel();
-        txtfldGender = new javax.swing.JTextField();
+        lblErrorDonorId = new javax.swing.JLabel();
+        txtFldFullName = new javax.swing.JTextField();
+        lblErrorFullName = new javax.swing.JLabel();
+        txtFldDonorId = new javax.swing.JTextField();
+        lblErrorAge = new javax.swing.JLabel();
+        txtFldBloodGroup = new javax.swing.JTextField();
+        txtFldAge = new javax.swing.JTextField();
+        lblErrorContact = new javax.swing.JLabel();
+        lblErrorBloodGroup = new javax.swing.JLabel();
+        txtFldContact = new javax.swing.JTextField();
+        lblErrorEmail = new javax.swing.JLabel();
+        txtFldAddress = new javax.swing.JTextField();
+        lblErrorAddress = new javax.swing.JLabel();
+        txtFldEmail = new javax.swing.JTextField();
+        lblErrorGender = new javax.swing.JLabel();
+        txtFldGender = new javax.swing.JTextField();
         btnDelete = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         lblDonorData = new javax.swing.JLabel();
-        btnSortDonorId = new javax.swing.JButton();
+        btnSelectionSortDonorId = new javax.swing.JButton();
         txtFldSearch = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
+        btnSearchName = new javax.swing.JButton();
+        btnInsertionSortAddress = new javax.swing.JButton();
+        btnMergeSortAge = new javax.swing.JButton();
         pnlContactUs = new javax.swing.JPanel();
         pnlImgDonate = new javax.swing.JPanel();
         lblDonateImg = new javax.swing.JLabel();
@@ -119,7 +119,7 @@ public class BloodBank extends javax.swing.JFrame {
         lblIconAddress = new javax.swing.JLabel();
         lblCallIcon = new javax.swing.JLabel();
         lblPointingIcon = new javax.swing.JLabel();
-        pnlLoginScreen = new javax.swing.JPanel();
+        pnlDonorLogin = new javax.swing.JPanel();
         pnlLogin = new javax.swing.JPanel();
         pnlRightLogin = new javax.swing.JPanel();
         lblSingnInTitle = new javax.swing.JLabel();
@@ -128,11 +128,11 @@ public class BloodBank extends javax.swing.JFrame {
         lblForgetPassword = new javax.swing.JLabel();
         btnLogin = new javax.swing.JButton();
         lblErrorLogin = new javax.swing.JLabel();
-        txtfldUsername = new javax.swing.JTextField();
-        pwfldPassword = new javax.swing.JPasswordField();
+        txtFldUsername = new javax.swing.JTextField();
+        pwFldPassword = new javax.swing.JPasswordField();
         lblheading = new javax.swing.JLabel();
         lblLogoBlood = new javax.swing.JLabel();
-        pnlLoadingScreen = new javax.swing.JPanel();
+        pnlWelcomeScreen = new javax.swing.JPanel();
         lblBloodLogo = new javax.swing.JLabel();
         lblHeadingTitle = new javax.swing.JLabel();
         lblSubHeading = new javax.swing.JLabel();
@@ -140,7 +140,7 @@ public class BloodBank extends javax.swing.JFrame {
         pgBarSplashScreen = new javax.swing.JProgressBar();
         lblLoading = new javax.swing.JLabel();
 
-        pnlMainScreen.setPreferredSize(new java.awt.Dimension(900, 550));
+        pnlDonorDashBoard.setPreferredSize(new java.awt.Dimension(900, 550));
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/bloodbank/resources/blood-bank.png"))); // NOI18N
 
@@ -202,7 +202,7 @@ public class BloodBank extends javax.swing.JFrame {
 
         tabPanMain.setBackground(new java.awt.Color(255, 255, 255));
         tabPanMain.setForeground(new java.awt.Color(204, 0, 0));
-        tabPanMain.setFont(new java.awt.Font("Helvetica Neue", 0, 15)); // NOI18N
+        tabPanMain.setFont(new java.awt.Font("Helvetica Neue", 1, 15)); // NOI18N
 
         pnlMiddleHome.setBackground(new java.awt.Color(204, 0, 51));
 
@@ -244,7 +244,7 @@ public class BloodBank extends javax.swing.JFrame {
                             .addGroup(pnlMiddleHomeLayout.createSequentialGroup()
                                 .addGap(85, 85, 85)
                                 .addComponent(lblFooterTitle1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)))
                 .addComponent(lblHandImg, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -290,7 +290,7 @@ public class BloodBank extends javax.swing.JFrame {
         pnlDonorList.setBackground(new java.awt.Color(255, 255, 255));
         pnlDonorList.setPreferredSize(new java.awt.Dimension(900, 600));
 
-        tblDonor.setBackground(new java.awt.Color(204, 0, 51));
+        tblDonor.setBackground(new java.awt.Color(204, 0, 0));
         tblDonor.setForeground(new java.awt.Color(255, 255, 255));
         tblDonor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -303,6 +303,11 @@ public class BloodBank extends javax.swing.JFrame {
                 "Donor Id", "Full Name", "Age", "Contact", "Blood Group", "Address", "Email", "Gender"
             }
         ));
+        tblDonor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDonorMouseClicked(evt);
+            }
+        });
         spTblDonor.setViewportView(tblDonor);
 
         lblInfoTable.setBackground(new java.awt.Color(204, 0, 51));
@@ -313,63 +318,66 @@ public class BloodBank extends javax.swing.JFrame {
         pnlDonorData.setBackground(new java.awt.Color(0, 0, 0));
         pnlDonorData.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
-        lblDonorId.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblDonorId.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorDonorId.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorDonorId.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldFullName.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldFullName.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldFullName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Full Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldFullName.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldFullName.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldFullName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Full Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        txtFldFullName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFldFullNameActionPerformed(evt);
+            }
+        });
 
-        lblFullName.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblFullName.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorFullName.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorFullName.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldDonorId.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldDonorId.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        txtfldDonorId.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldDonorId.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Donor ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldDonorId.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldDonorId.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldDonorId.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Donor ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        lblAge.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblAge.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorAge.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorAge.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldBloodGroup.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldBloodGroup.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldBloodGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Blood Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldBloodGroup.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldBloodGroup.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldBloodGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Blood Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        txtfldAge.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldAge.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        txtfldAge.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldAge.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldAge.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldAge.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldAge.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Age", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        lblContact.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblContact.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorContact.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorContact.setForeground(new java.awt.Color(204, 0, 0));
 
-        lblBloodGroup.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblBloodGroup.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorBloodGroup.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorBloodGroup.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldContact.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldContact.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldContact.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldContact.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldContact.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldContact.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        lblEmail.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblEmail.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorEmail.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorEmail.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldAddress.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldAddress.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldAddress.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Address", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldAddress.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldAddress.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldAddress.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Address", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        lblAddress.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblAddress.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorAddress.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorAddress.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldEmail.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldEmail.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldEmail.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Email", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldEmail.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldEmail.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldEmail.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Email", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        lblGender.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
-        lblGender.setForeground(new java.awt.Color(255, 255, 255));
+        lblErrorGender.setFont(new java.awt.Font("Helvetica Neue", 0, 9)); // NOI18N
+        lblErrorGender.setForeground(new java.awt.Color(204, 0, 0));
 
-        txtfldGender.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldGender.setForeground(new java.awt.Color(255, 255, 255));
-        txtfldGender.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Gender", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldGender.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldGender.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldGender.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Gender", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
         btnDelete.setBackground(new java.awt.Color(204, 0, 0));
         btnDelete.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
@@ -422,81 +430,87 @@ public class BloodBank extends javax.swing.JFrame {
             .addGroup(pnlDonorDataLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtfldDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                    .addComponent(txtfldAddress)
-                    .addComponent(lblDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtFldDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                    .addComponent(txtFldAddress)
+                    .addComponent(lblErrorDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblErrorAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(27, 27, 27)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtfldFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtfldEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
-                    .addComponent(lblFullName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
-                .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlDonorDataLayout.createSequentialGroup()
-                        .addComponent(txtfldAge, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(txtfldContact, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblBloodGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtfldBloodGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(66, 66, 66))
+                    .addComponent(lblErrorFullName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlDonorDataLayout.createSequentialGroup()
                         .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtfldGender, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                            .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblAge, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtFldFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                            .addComponent(lblErrorEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlDonorDataLayout.createSequentialGroup()
+                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblErrorGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtFldGender, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(42, 42, 42)
+                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlDonorDataLayout.createSequentialGroup()
+                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblErrorAge, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFldAge, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
                         .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlDonorDataLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                                .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(42, 42, 42)
-                                .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(50, 50, 50))
+                                .addGap(25, 25, 25)
+                                .addComponent(lblErrorContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(pnlDonorDataLayout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(lblContact, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(19, 19, 19)
+                                .addComponent(txtFldContact, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblErrorBloodGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtFldBloodGroup, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         pnlDonorDataLayout.setVerticalGroup(
             pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDonorDataLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtfldDonorId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtfldFullName, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtfldAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtfldContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtfldBloodGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
+                    .addComponent(txtFldDonorId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFldFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFldAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFldContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFldBloodGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(lblFullName, javax.swing.GroupLayout.DEFAULT_SIZE, 10, Short.MAX_VALUE)
-                    .addComponent(lblDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblBloodGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(34, 34, 34)
+                    .addComponent(lblErrorFullName, javax.swing.GroupLayout.DEFAULT_SIZE, 10, Short.MAX_VALUE)
+                    .addComponent(lblErrorDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblErrorBloodGroup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblErrorContact, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblErrorAge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlDonorDataLayout.createSequentialGroup()
+                        .addGap(55, 55, 55)
                         .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtfldAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtfldEmail)
-                        .addComponent(txtfldGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtFldAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtFldEmail)
+                        .addComponent(txtFldGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
-                    .addComponent(lblAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblErrorEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 11, Short.MAX_VALUE)
+                    .addComponent(lblErrorAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblErrorGender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlDonorDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -509,21 +523,39 @@ public class BloodBank extends javax.swing.JFrame {
         lblDonorData.setForeground(new java.awt.Color(204, 0, 51));
         lblDonorData.setText("Donor Data");
 
-        btnSortDonorId.setFont(new java.awt.Font("Helvetica Neue", 1, 16)); // NOI18N
-        btnSortDonorId.setForeground(new java.awt.Color(204, 51, 0));
-        btnSortDonorId.setText("Sort Donor ID");
-        btnSortDonorId.addActionListener(new java.awt.event.ActionListener() {
+        btnSelectionSortDonorId.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnSelectionSortDonorId.setForeground(new java.awt.Color(204, 51, 0));
+        btnSelectionSortDonorId.setText("Sort Donor ID");
+        btnSelectionSortDonorId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSortDonorIdActionPerformed(evt);
+                btnSelectionSortDonorIdActionPerformed(evt);
             }
         });
 
-        btnSearch.setFont(new java.awt.Font("Helvetica Neue", 1, 16)); // NOI18N
-        btnSearch.setForeground(new java.awt.Color(204, 0, 0));
-        btnSearch.setText("Search");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchName.setFont(new java.awt.Font("Helvetica Neue", 1, 16)); // NOI18N
+        btnSearchName.setForeground(new java.awt.Color(204, 0, 0));
+        btnSearchName.setText("Search Name");
+        btnSearchName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
+                btnSearchNameActionPerformed(evt);
+            }
+        });
+
+        btnInsertionSortAddress.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnInsertionSortAddress.setForeground(new java.awt.Color(204, 0, 0));
+        btnInsertionSortAddress.setText("Sort Address");
+        btnInsertionSortAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertionSortAddressActionPerformed(evt);
+            }
+        });
+
+        btnMergeSortAge.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnMergeSortAge.setForeground(new java.awt.Color(204, 0, 0));
+        btnMergeSortAge.setText("MergeSort Age");
+        btnMergeSortAge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMergeSortAgeActionPerformed(evt);
             }
         });
 
@@ -532,7 +564,7 @@ public class BloodBank extends javax.swing.JFrame {
         pnlDonorListLayout.setHorizontalGroup(
             pnlDonorListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDonorListLayout.createSequentialGroup()
-                .addComponent(spTblDonor, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
+                .addComponent(spTblDonor)
                 .addContainerGap())
             .addComponent(pnlDonorData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlDonorListLayout.createSequentialGroup()
@@ -543,24 +575,31 @@ public class BloodBank extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlDonorListLayout.createSequentialGroup()
                         .addComponent(lblInfoTable, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSearch)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnSearchName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(btnSortDonorId)
-                        .addGap(36, 36, 36))))
+                        .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnMergeSortAge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnInsertionSortAddress)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSelectionSortDonorId)
+                        .addGap(15, 15, 15))))
         );
         pnlDonorListLayout.setVerticalGroup(
             pnlDonorListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlDonorListLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlDonorListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblInfoTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlDonorListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSortDonorId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblInfoTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSearchName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtFldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMergeSortAge))
+                    .addGroup(pnlDonorListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSelectionSortDonorId)
+                        .addComponent(btnInsertionSortAddress)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spTblDonor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -706,7 +745,7 @@ public class BloodBank extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContactDetailsLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(lblPointingIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                 .addComponent(pnlDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 532, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57))
         );
@@ -736,41 +775,41 @@ public class BloodBank extends javax.swing.JFrame {
 
         tabPanMain.addTab("Contact Us", pnlContactUs);
 
-        javax.swing.GroupLayout pnlMainScreenLayout = new javax.swing.GroupLayout(pnlMainScreen);
-        pnlMainScreen.setLayout(pnlMainScreenLayout);
-        pnlMainScreenLayout.setHorizontalGroup(
-            pnlMainScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlDonorDashBoardLayout = new javax.swing.GroupLayout(pnlDonorDashBoard);
+        pnlDonorDashBoard.setLayout(pnlDonorDashBoardLayout);
+        pnlDonorDashBoardLayout.setHorizontalGroup(
+            pnlDonorDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlMainBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(tabPanMain)
         );
-        pnlMainScreenLayout.setVerticalGroup(
-            pnlMainScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMainScreenLayout.createSequentialGroup()
+        pnlDonorDashBoardLayout.setVerticalGroup(
+            pnlDonorDashBoardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlDonorDashBoardLayout.createSequentialGroup()
                 .addComponent(pnlMainBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabPanMain, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE))
         );
 
-        pnlLoginScreen.setPreferredSize(new java.awt.Dimension(900, 550));
+        pnlDonorLogin.setPreferredSize(new java.awt.Dimension(900, 550));
 
         pnlLogin.setBackground(new java.awt.Color(204, 0, 51));
 
         pnlRightLogin.setBackground(new java.awt.Color(0, 0, 0));
 
         lblSingnInTitle.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
-        lblSingnInTitle.setForeground(new java.awt.Color(204, 0, 0));
+        lblSingnInTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblSingnInTitle.setText("Sign in to Blood Bank");
 
         lblAdminLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/bloodbank/resources/admin.png"))); // NOI18N
         lblAdminLogo.setText("jLabel1");
 
         lblSubHeadingTitleLogin.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        lblSubHeadingTitleLogin.setForeground(new java.awt.Color(204, 0, 0));
+        lblSubHeadingTitleLogin.setForeground(new java.awt.Color(255, 255, 255));
         lblSubHeadingTitleLogin.setText("Please enter your login details below");
 
         lblForgetPassword.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        lblForgetPassword.setForeground(new java.awt.Color(204, 0, 0));
-        lblForgetPassword.setText("                                       Forgot your Password?");
+        lblForgetPassword.setForeground(new java.awt.Color(255, 255, 255));
+        lblForgetPassword.setText("                                    Forgot your Password?");
 
         btnLogin.setBackground(new java.awt.Color(204, 0, 0));
         btnLogin.setFont(new java.awt.Font("Helvetica Neue", 1, 16)); // NOI18N
@@ -782,23 +821,24 @@ public class BloodBank extends javax.swing.JFrame {
             }
         });
 
+        lblErrorLogin.setFont(new java.awt.Font("Helvetica Neue", 0, 12)); // NOI18N
         lblErrorLogin.setForeground(new java.awt.Color(204, 51, 0));
         lblErrorLogin.setText("                       ");
 
-        txtfldUsername.setBackground(new java.awt.Color(0, 0, 0));
-        txtfldUsername.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        txtfldUsername.setForeground(new java.awt.Color(204, 0, 0));
-        txtfldUsername.setText("admin");
-        txtfldUsername.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
+        txtFldUsername.setBackground(new java.awt.Color(0, 0, 0));
+        txtFldUsername.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        txtFldUsername.setForeground(new java.awt.Color(255, 255, 255));
+        txtFldUsername.setText("prabin");
+        txtFldUsername.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
 
-        pwfldPassword.setBackground(new java.awt.Color(0, 0, 0));
-        pwfldPassword.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        pwfldPassword.setForeground(new java.awt.Color(204, 51, 0));
-        pwfldPassword.setText("admin");
-        pwfldPassword.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 0), 2), "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(204, 0, 0))); // NOI18N
-        pwfldPassword.addActionListener(new java.awt.event.ActionListener() {
+        pwFldPassword.setBackground(new java.awt.Color(0, 0, 0));
+        pwFldPassword.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        pwFldPassword.setForeground(new java.awt.Color(255, 255, 255));
+        pwFldPassword.setText("prabin");
+        pwFldPassword.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2), "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 15), new java.awt.Color(255, 255, 255))); // NOI18N
+        pwFldPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pwfldPasswordActionPerformed(evt);
+                pwFldPasswordActionPerformed(evt);
             }
         });
 
@@ -806,25 +846,35 @@ public class BloodBank extends javax.swing.JFrame {
         pnlRightLogin.setLayout(pnlRightLoginLayout);
         pnlRightLoginLayout.setHorizontalGroup(
             pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblForgetPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnlRightLoginLayout.createSequentialGroup()
                 .addGroup(pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRightLoginLayout.createSequentialGroup()
                         .addGap(116, 116, 116)
                         .addGroup(pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtfldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSubHeadingTitleLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pwfldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pwFldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSingnInTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlRightLoginLayout.createSequentialGroup()
                         .addGap(173, 173, 173)
                         .addComponent(lblAdminLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
-            .addComponent(lblErrorLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(80, Short.MAX_VALUE))
+            .addGroup(pnlRightLoginLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblForgetPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRightLoginLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblErrorLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRightLoginLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
+                .addGroup(pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRightLoginLayout.createSequentialGroup()
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRightLoginLayout.createSequentialGroup()
+                        .addComponent(lblSubHeadingTitleLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(65, 65, 65))))
         );
         pnlRightLoginLayout.setVerticalGroup(
             pnlRightLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -836,65 +886,66 @@ public class BloodBank extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSubHeadingTitleLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(txtfldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(pwfldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblErrorLogin)
+                .addComponent(pwFldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblForgetPassword)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(lblErrorLogin)
+                .addContainerGap(125, Short.MAX_VALUE))
         );
 
         lblheading.setFont(new java.awt.Font("Helvetica Neue", 1, 30)); // NOI18N
         lblheading.setForeground(new java.awt.Color(255, 255, 255));
-        lblheading.setText("      Blood Bank Management ");
+        lblheading.setText("        Blood Bank Management ");
 
-        lblLogoBlood.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/bloodbank/resources/blooddonationiconpng (1).png"))); // NOI18N
+        lblLogoBlood.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/bloodbank/resources/blooddonationicon.png"))); // NOI18N
 
         javax.swing.GroupLayout pnlLoginLayout = new javax.swing.GroupLayout(pnlLogin);
         pnlLogin.setLayout(pnlLoginLayout);
         pnlLoginLayout.setHorizontalGroup(
             pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginLayout.createSequentialGroup()
+            .addGroup(pnlLoginLayout.createSequentialGroup()
                 .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlLoginLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblheading, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblheading, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2))
                     .addGroup(pnlLoginLayout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(lblLogoBlood, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(pnlRightLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(41, 41, 41)
+                        .addComponent(lblLogoBlood, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(pnlRightLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         pnlLoginLayout.setVerticalGroup(
-            pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginLayout.createSequentialGroup()
-                .addContainerGap(90, Short.MAX_VALUE)
-                .addComponent(lblLogoBlood, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(pnlLoginLayout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(lblLogoBlood, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(lblheading)
-                .addGap(184, 184, 184))
-            .addComponent(pnlRightLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlRightLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout pnlLoginScreenLayout = new javax.swing.GroupLayout(pnlLoginScreen);
-        pnlLoginScreen.setLayout(pnlLoginScreenLayout);
-        pnlLoginScreenLayout.setHorizontalGroup(
-            pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlDonorLoginLayout = new javax.swing.GroupLayout(pnlDonorLogin);
+        pnlDonorLogin.setLayout(pnlDonorLoginLayout);
+        pnlDonorLoginLayout.setHorizontalGroup(
+            pnlDonorLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        pnlLoginScreenLayout.setVerticalGroup(
-            pnlLoginScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlDonorLoginLayout.setVerticalGroup(
+            pnlDonorLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        pnlLoadingScreen.setBackground(new java.awt.Color(204, 0, 51));
-        pnlLoadingScreen.setPreferredSize(new java.awt.Dimension(900, 550));
+        pnlWelcomeScreen.setBackground(new java.awt.Color(204, 0, 51));
+        pnlWelcomeScreen.setPreferredSize(new java.awt.Dimension(1000, 650));
 
         lblBloodLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/bloodbank/resources/blooddonationiconpng (1).png"))); // NOI18N
 
@@ -915,30 +966,30 @@ public class BloodBank extends javax.swing.JFrame {
         lblLoading.setForeground(new java.awt.Color(255, 255, 255));
         lblLoading.setText(" Loading...");
 
-        javax.swing.GroupLayout pnlLoadingScreenLayout = new javax.swing.GroupLayout(pnlLoadingScreen);
-        pnlLoadingScreen.setLayout(pnlLoadingScreenLayout);
-        pnlLoadingScreenLayout.setHorizontalGroup(
-            pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlWelcomeScreenLayout = new javax.swing.GroupLayout(pnlWelcomeScreen);
+        pnlWelcomeScreen.setLayout(pnlWelcomeScreenLayout);
+        pnlWelcomeScreenLayout.setHorizontalGroup(
+            pnlWelcomeScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lblSubHeading, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(lblHeadingTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
-                .addGroup(pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+            .addGroup(pnlWelcomeScreenLayout.createSequentialGroup()
+                .addGroup(pnlWelcomeScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlWelcomeScreenLayout.createSequentialGroup()
                         .addGap(246, 246, 246)
                         .addComponent(lblBloodLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+                    .addGroup(pnlWelcomeScreenLayout.createSequentialGroup()
                         .addGap(296, 296, 296)
                         .addComponent(lblThirdHeading, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+                    .addGroup(pnlWelcomeScreenLayout.createSequentialGroup()
                         .addGap(287, 287, 287)
-                        .addGroup(pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlWelcomeScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(pgBarSplashScreen, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(241, Short.MAX_VALUE))
         );
-        pnlLoadingScreenLayout.setVerticalGroup(
-            pnlLoadingScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlLoadingScreenLayout.createSequentialGroup()
+        pnlWelcomeScreenLayout.setVerticalGroup(
+            pnlWelcomeScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlWelcomeScreenLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(lblBloodLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -958,11 +1009,11 @@ public class BloodBank extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlLoadingScreen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlWelcomeScreen, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlLoadingScreen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlWelcomeScreen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
         );
 
         pack();
@@ -973,26 +1024,29 @@ public class BloodBank extends javax.swing.JFrame {
      * and adding panels for different screens. Each panel is uniquely
      * identified for easy navigation between screens.
      */
-    private void initializeLayout() {
+    private void initializePanelLayout() {
         cardLayout = new java.awt.CardLayout();
         getContentPane().setLayout(cardLayout);
         
         
          //Adding panels with unique identifiers 
-        getContentPane().add(pnlLoadingScreen, "LoadingScreen");
-        getContentPane().add(pnlLoginScreen, "LoginScreen");
-        getContentPane().add(pnlMainScreen, "MainScreen");
+        getContentPane().add(pnlWelcomeScreen, "LoadingScreen");
+        getContentPane().add(pnlDonorLogin, "LoginScreen");
+        getContentPane().add(pnlDonorDashBoard, "MainScreen");
                                           
          //Start with loading screen
-        loadScreen("LoadingScreen");
+        runScreen("LoadingScreen");
         
     }
+    
+    
+    
     
     /**
      * Initializes the application's data, including the donor list and table.
      * Populates the donor list with sample data for demonstration purposes.
      */
-   private void dataInitialize() {
+   private void toInitializeData() {
        donorList = new LinkedList<>();
        
        // Registering the sample of donors
@@ -1012,9 +1066,10 @@ public class BloodBank extends javax.swing.JFrame {
      * progress bar incrementally and switches to the login screen upon
      * completion.
      */
-    private void startProgress(){
-        javax.swing.SwingWorker<Void, Integer> worker  = new javax.swing.SwingWorker<>(){
-            @Override 
+    private void runProgress(){
+        javax.swing.SwingWorker<Void, Integer> run;
+        run = new javax.swing.SwingWorker<>(){ 
+            @Override
             protected Void doInBackground() throws Exception {
                 for (int i = 0; i <= 100; i++){
                     Thread.sleep(30); // Delay for progress bar
@@ -1027,18 +1082,20 @@ public class BloodBank extends javax.swing.JFrame {
             protected void process(java.util.List<Integer> chunks) {
                 int progress = chunks.get(chunks.size() -1);
                 pgBarSplashScreen.setValue(progress);
+                pgBarSplashScreen.setString(progress + "%");
+                pgBarSplashScreen.setStringPainted(true);
             }
 
             @Override
             protected void done() {
-                loadScreen("LoginScreen"); // Switch to login screen
+                runScreen("LoginScreen"); // Switch to login screen
             }
-           };
-          worker.execute();
+        };
+          run.execute();
         
     }
     
-    // Method to add student and populate the data
+    // Method to add donor and populate the data
     private void registerDonor(BloodModel  donor){
         donorList.add(donor);
         DefaultTableModel tblModel = (DefaultTableModel) tblDonor.getModel();
@@ -1057,7 +1114,7 @@ public class BloodBank extends javax.swing.JFrame {
      * Populates the JTable with the current list of donor records. Clears
      * existing rows in the table model before adding new data.
      */
-    private void loadListToTable(List<BloodModel> donorList) {
+    private void donorListToTable(List<BloodModel> donorList) {
         DefaultTableModel tblModel = (DefaultTableModel) tblDonor.getModel();
         
         // clear all row if required
@@ -1087,20 +1144,21 @@ public class BloodBank extends javax.swing.JFrame {
      * validation criteria
      * @return true if the field passes validation, false otherwise
      */
+  
     
-   private boolean validateField(JTextField textField, String fieldName, JLabel errorLbl, String errorMsg, Color errorColor, Color successColor, boolean isValidFormat) {
+   private boolean tovalidateTextField(JTextField textField, String fieldName, JLabel errorLbl, String errorMsg, Color errorDarkRed, Color successColor, boolean isValidFormat) {
         if (ValidationUtil.isNullOrEmpty(textField.getText())) {
-            textField.setBorder(createTitledBorder(errorColor, fieldName));
-            errorLbl.setText("Field cannot be empty!");
+            textField.setBorder(createBloodBankTitledBorder(errorDarkRed, fieldName));
+            errorLbl.setText("Please fill detail!");
             errorLbl.setVisible(true);
             return false;
         } else if (!isValidFormat) {
-            textField.setBorder(createTitledBorder(errorColor, fieldName));
+            textField.setBorder(createBloodBankTitledBorder(errorDarkRed, fieldName));
             errorLbl.setText(errorMsg);
             errorLbl.setVisible(true);
             return false;
         } else {
-            textField.setBorder(createTitledBorder(successColor, fieldName));
+            textField.setBorder(createBloodBankTitledBorder(successColor, fieldName));
             errorLbl.setVisible(false);
             return true;
         }
@@ -1113,9 +1171,9 @@ public class BloodBank extends javax.swing.JFrame {
      * @param title the title text for the border
      * @return a TitledBorder instance
      */
-    private javax.swing.border.TitledBorder createTitledBorder(Color color, String title) {
+    private javax.swing.border.TitledBorder createBloodBankTitledBorder(Color color, String title) {
         return javax.swing.BorderFactory.createTitledBorder(
-                javax.swing.BorderFactory.createLineBorder(color, 2),
+                javax.swing.BorderFactory.createLineBorder(color, 3),
                 title,
                 javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
                 javax.swing.border.TitledBorder.DEFAULT_POSITION,
@@ -1135,7 +1193,7 @@ public class BloodBank extends javax.swing.JFrame {
      * error)
      */
     
-    private void showDialogBox(String message, String title, int messageType) {
+    private void toDisplayDialogBox(String message, String title, int messageType) {
         JOptionPane.showMessageDialog(this, message, title, messageType);
     }
     
@@ -1149,7 +1207,7 @@ public class BloodBank extends javax.swing.JFrame {
      *
      * @param screenName The name of the screen to display.
      */
-    private void loadScreen(String screenName) {
+    private void runScreen(String screenName) {
         cardLayout.show(getContentPane(), screenName);
     }
     
@@ -1164,37 +1222,60 @@ public class BloodBank extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         // get username and password input
-        String username = txtfldUsername.getText();
-        String password = new String(pwfldPassword.getPassword());
-        
-        // check if username or password is empty
-        if(username.isEmpty() || password.isEmpty()) {
-            lblErrorLogin.setText("Please enter username and password");
-        }
-        // check if username and password is incorrect
-        else if (!username.equals("admin") || !password.equals("admin")){
-            lblErrorLogin.setText("Invalid Username and Password...!");
-            
-        }// If all details are correct then proceed to main screen
-        else{
-            lblErrorLogin.setText(""); // clear error messages from txtfield
-            loadScreen("MainScreen");
-        }
+       // get username and password input
+    String username = txtFldUsername.getText();
+    String password = new String(pwFldPassword.getPassword());
+    
+    // check if username or password is empty
+    if(username.isEmpty() || password.isEmpty()) {
+        lblErrorLogin.setText("Please fill Username and Password");
+    }
+    // check for incorrect username and password
+    else if (!username.equals("prabin") && !password.equals("prabin")) {
+        lblErrorLogin.setText("Invalid Username and Password...!");
+    }
+    // check if only username is incorrect
+    else if (!username.equals("prabin")) {
+        lblErrorLogin.setText("Incorrect Username");
+    }
+    // check if only password is incorrect
+    else if (!password.equals("prabin")) {
+        lblErrorLogin.setText("Incorrect Password");
+    }
+    // If all details are correct then proceed to main screen
+    else {
+        lblErrorLogin.setText(""); // clear error messages from txtfield
+         JOptionPane.showMessageDialog(this, "Successfully Logged In!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+        runScreen("MainScreen");
+    }
         
       
     }//GEN-LAST:event_btnLoginActionPerformed
 
-    /**
-     * Handles the logout button action. Clears the login fields and switches
-     * back to the login screen.
-     *
-     * @param evt The action event triggered by the logout button.
-     */
+/**
+ * Handles the logout button action. Prompts the user for confirmation
+ * before logging out. Clears the login fields and switches back to 
+ * the login screen if confirmed.
+ *
+ * @param evt The action event triggered by the logout button.
+ */
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
-        txtfldUsername.setText("");
-        pwfldPassword.setText("");
-        loadScreen("LoginScreen"); // load the main screen
+       // Show confirmation dialog
+    int response = JOptionPane.showConfirmDialog(
+        null, 
+        "Are you sure you want to logout?", 
+        "Logout Confirmation", 
+        JOptionPane.YES_NO_OPTION, 
+        JOptionPane.QUESTION_MESSAGE
+    );
+
+    // If user confirms logout
+    if (response == JOptionPane.YES_OPTION) {
+        txtFldUsername.setText("");
+        pwFldPassword.setText("");
+        runScreen("LoginScreen"); // Load the login screen
+    }
         
     }//GEN-LAST:event_btnLogoutActionPerformed
 
@@ -1204,128 +1285,116 @@ public class BloodBank extends javax.swing.JFrame {
      */
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
-        txtfldDonorId.setText("");
-        txtfldFullName.setText("");
-        txtfldAge.setText("");
-        txtfldContact.setText("");
-        txtfldBloodGroup.setText("");
-        txtfldAddress.setText("");
-        txtfldEmail.setText("");
-        txtfldGender.setText("");
+        txtFldDonorId.setText("");
+        txtFldFullName.setText("");
+        txtFldAge.setText("");
+        txtFldContact.setText("");
+        txtFldBloodGroup.setText("");
+        txtFldAddress.setText("");
+        txtFldEmail.setText("");
+        txtFldGender.setText("");
         
     }//GEN-LAST:event_btnClearActionPerformed
 
     /**
-     * Clears all input fields in the student form. Resets each field's value to
+     * Clears all input fields in the Donor form. Resets each field's value to
      * an empty string.
      */
     private void clearDonorForm() {
-        txtfldDonorId.setText("");
-        txtfldFullName.setText("");
-        txtfldAge.setText("");
-        txtfldContact.setText("");
-        txtfldBloodGroup.setText("");
-        txtfldAddress.setText("");
-        txtfldEmail.setText("");
-        txtfldGender.setText("");
+        txtFldDonorId.setText("");
+        txtFldFullName.setText("");
+        txtFldAge.setText("");
+        txtFldContact.setText("");
+        txtFldBloodGroup.setText("");
+        txtFldAddress.setText("");
+        txtFldEmail.setText("");
+        txtFldGender.setText("");
         
     }
     
     
     
-    
-    
-    
+   
     
     // Adding button function
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
-
          boolean isValid = true;
 
     // Validate Donor ID
-    isValid &= validateField(
-            txtfldDonorId, "Donor ID", lblDonorId, "Must be a 4-digit number.",
-            errorColor, yellowColor, ValidationUtil.isValidDonorId(txtfldDonorId.getText())
+    isValid &= tovalidateTextField(txtFldDonorId, "Donor ID", lblErrorDonorId, "Contain 4-digit number Only!.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidDonorId(txtFldDonorId.getText())
     );
 
     // Validate Full Name
-    isValid &= validateField(
-            txtfldFullName, "Full Name", lblFullName, "Must contain only alphabets.",
-            errorColor, yellowColor, ValidationUtil.isValidName(txtfldFullName.getText())
+    isValid &= tovalidateTextField(txtFldFullName, "Full Name", lblErrorFullName, "Contain only alphabets.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidName(txtFldFullName.getText())
     );
 
     // Validate Blood Group
-    isValid &= validateField(
-            txtfldBloodGroup, "Blood Group", lblBloodGroup, "Select A-, A+, O+, B+, AB+, B-, O- or AB-.",
-            errorColor, yellowColor, ValidationUtil.isValidBloodGroup(txtfldBloodGroup.getText())
+    isValid &= tovalidateTextField(txtFldBloodGroup, "Blood Group", lblErrorBloodGroup, "Select A-, A+, O+, B+, AB+, B-, O- or AB-.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidBloodGroup(txtFldBloodGroup.getText())
     );
 
     // Validate Contact
-    isValid &= validateField(
-            txtfldContact, "Contact", lblContact, "Must start with 98 and have 10 digits.",
-            errorColor, yellowColor, ValidationUtil.isValidContact(txtfldContact.getText())
+    isValid &= tovalidateTextField(txtFldContact, "Contact", lblErrorContact, "Start with 98 and have 10 digits numbers.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidContact(txtFldContact.getText())
     );
 
     // Validate Address
-    isValid &= validateField(
-            txtfldAddress, "Address", lblAddress, "Must be only alphabets.",
-            errorColor, yellowColor, ValidationUtil.isValidAddress(txtfldAddress.getText())
+    isValid &= tovalidateTextField(txtFldAddress, "Address", lblErrorAddress, "Contain only alphabets.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidAddress(txtFldAddress.getText())
     );
 
     // Validate Email
-    isValid &= validateField(
-            txtfldEmail, "Email", lblEmail, "Must be a valid email address.",
-            errorColor, yellowColor, ValidationUtil.isValidEmail(txtfldEmail.getText())
+    isValid &= tovalidateTextField(txtFldEmail, "Email", lblErrorEmail, "Contain @ in email address.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidEmail(txtFldEmail.getText())
     );
 
     // Validate Gender
-    isValid &= validateField(
-            txtfldGender, "Gender", lblGender, "Select Male, Female, or Others.",
-            errorColor, yellowColor, ValidationUtil.isValidGender(txtfldGender.getText())
+    isValid &= tovalidateTextField(txtFldGender, "Gender", lblErrorGender, "Select Male, Female, or Others.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidGender(txtFldGender.getText())
     );
 
     // Validate Age
     try {
-        short age = Short.parseShort(txtfldAge.getText().trim());
-        isValid &= validateField(
-                txtfldAge, "Age", lblAge, "Must be between 21 and 40.",
-                errorColor, yellowColor, ValidationUtil.isValidAge(age)
+        short age = Short.parseShort(txtFldAge.getText().trim());
+        isValid &= tovalidateTextField(txtFldAge, "Age", lblErrorAge, "Age must be between 18 to 50.",
+                errorDarkRed, whiteColor, ValidationUtil.isValidAge(age)
         );
     } catch (NumberFormatException e) {
-        validateField(txtfldAge, "Age", lblAge, "Must be a valid number.", errorColor, yellowColor, false);
+        tovalidateTextField(txtFldAge, "Age", lblErrorAge, "Contain valid number only!.", errorDarkRed, whiteColor, false);
         isValid = false;
     }
 
     if (isValid) {
-        // Create a BloodModel instance
+        // Creating a BloodModel instance
         BloodModel newDonor = new BloodModel(
-                Integer.parseInt(txtfldDonorId.getText().trim()),
-                txtfldFullName.getText().trim(),
-                Short.parseShort(txtfldAge.getText().trim()),
-                txtfldContact.getText().trim(),
-                txtfldBloodGroup.getText().trim(),
-                txtfldAddress.getText().trim(),
-                txtfldEmail.getText().trim(),
-                txtfldGender.getText().trim()
-               
+                Integer.parseInt(txtFldDonorId.getText().trim()),
+                txtFldFullName.getText().trim(),
+                Short.parseShort(txtFldAge.getText().trim()),
+                txtFldContact.getText().trim(),
+                txtFldBloodGroup.getText().trim(),
+                txtFldAddress.getText().trim(),
+                txtFldEmail.getText().trim(),
+                txtFldGender.getText().trim()
         );
 
         // Check for duplicate Donor ID
         if (checkDuplicateDonor(newDonor)) {
-            txtfldDonorId.setBorder(createTitledBorder(errorColor, "Donor ID"));
-            showDialogBox("Donor ID already exists.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
+            txtFldDonorId.setBorder(createBloodBankTitledBorder(errorDarkRed, "Donor ID"));
+            toDisplayDialogBox("ID Already exists in the table.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
         } else {
             // Add the donor if no duplicate is found
             donorList.add(newDonor);
             clearDonorForm();
-            loadListToTable(donorList);
-            txtfldDonorId.setBorder(createTitledBorder(yellowColor, "Donor ID"));
-            showDialogBox("Donor added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            donorListToTable(donorList);
+            txtFldDonorId.setBorder(createBloodBankTitledBorder(whiteColor, "Donor ID"));
+            toDisplayDialogBox("Added successfully.", "Successful", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
-   
+      
       
        
     }//GEN-LAST:event_btnAddActionPerformed
@@ -1334,125 +1403,121 @@ public class BloodBank extends javax.swing.JFrame {
     
    
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-        // Update Button Functionality
-       boolean isValid = true;
+     // Update Button Functionality                                         
+    boolean isValid = true; // To track if all validations pass
 
-    // Validate fields (same as the Add button)
-    isValid &= validateField(
-            txtfldDonorId, "Donor ID", lblDonorId, "Must be a 4-digit number.",
-            errorColor, yellowColor, ValidationUtil.isValidDonorId(txtfldDonorId.getText())
+    // Validate each field and track if any validation fails
+    isValid &= tovalidateTextField(txtFldDonorId, "Donor ID", lblErrorDonorId, "Contain 4-digit number only!.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidDonorId(txtFldDonorId.getText())
     );
-    isValid &= validateField(
-            txtfldFullName, "Full Name", lblFullName, "Must contain only alphabets.",
-            errorColor, yellowColor, ValidationUtil.isValidName(txtfldFullName.getText())
+    isValid &= tovalidateTextField(txtFldFullName, "Full Name", lblErrorFullName, "Contain only alphabets.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidName(txtFldFullName.getText())
     );
-    isValid &= validateField(
-            txtfldBloodGroup, "Blood Group", lblBloodGroup, "Select A-, A+, O+, B+, AB+, B-, O- or AB-.",
-            errorColor, yellowColor, ValidationUtil.isValidBloodGroup(txtfldBloodGroup.getText())
+    isValid &= tovalidateTextField(txtFldBloodGroup, "Blood Group", lblErrorBloodGroup, "Select A-, A+, O+, B+, AB+, B-, O- or AB-.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidBloodGroup(txtFldBloodGroup.getText())
     );
-    isValid &= validateField(
-            txtfldContact, "Contact", lblContact, "Must start with 98 and have 10 digits.",
-            errorColor, yellowColor, ValidationUtil.isValidContact(txtfldContact.getText())
+    isValid &= tovalidateTextField(txtFldContact, "Contact", lblErrorContact, "Start with 98 have 10 digits numbers.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidContact(txtFldContact.getText())
     );
-    isValid &= validateField(
-            txtfldAddress, "Address", lblAddress, "Must be only alphabets.",
-            errorColor, yellowColor, ValidationUtil.isValidAddress(txtfldAddress.getText())
+    isValid &= tovalidateTextField(txtFldAddress, "Address", lblErrorAddress, "Contain only alphabets.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidAddress(txtFldAddress.getText())
     );
-    isValid &= validateField(
-            txtfldEmail, "Email", lblEmail, "Must be a valid email address.",
-            errorColor, yellowColor, ValidationUtil.isValidEmail(txtfldEmail.getText())
+    isValid &= tovalidateTextField(txtFldEmail, "Email", lblErrorEmail, "Must have @ in email address.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidEmail(txtFldEmail.getText())
     );
-    isValid &= validateField(
-            txtfldGender, "Gender", lblGender, "Select Male, Female, or Others.",
-            errorColor, yellowColor, ValidationUtil.isValidGender(txtfldGender.getText())
+    isValid &= tovalidateTextField(txtFldGender, "Gender", lblErrorGender, "Select Male, Female, or Others.",
+            errorDarkRed, whiteColor, ValidationUtil.isValidGender(txtFldGender.getText())
     );
 
     try {
-        short age = Short.parseShort(txtfldAge.getText().trim());
-        isValid &= validateField(
-                txtfldAge, "Age", lblAge, "Must be between 21 and 40.",
-                errorColor, yellowColor, ValidationUtil.isValidAge(age)
+        short age = Short.parseShort(txtFldAge.getText().trim());
+        isValid &= tovalidateTextField(txtFldAge, "Age", lblErrorAge, "Age must be between 18 to 50.",
+                errorDarkRed, whiteColor, ValidationUtil.isValidAge(age)
         );
     } catch (NumberFormatException e) {
-        validateField(txtfldAge, "Age", lblAge, "Must be a valid number.", errorColor, yellowColor, false);
-        isValid = false;
+        isValid &= tovalidateTextField(txtFldAge, "Age", lblErrorAge, "Contain valid number only.", errorDarkRed, whiteColor, false);
     }
 
-    //Get table model
-   DefaultTableModel tableModel = (DefaultTableModel) tblDonor.getModel();
-   if (tblDonor.getSelectedRowCount() == 1) {
-
-    try {
-        int selectedRow = tblDonor.getSelectedRow();
-
-        // Retrieve existing values for fields that are not being updated
-        Object donorId = tableModel.getValueAt(selectedRow, 0);
-        Object fullname = tableModel.getValueAt(selectedRow, 1);
-        Object age = tableModel.getValueAt(selectedRow, 2);
-        Object contact = tableModel.getValueAt(selectedRow, 3);
-        Object bloodgroup = tableModel.getValueAt(selectedRow, 4);
-        Object address = tableModel.getValueAt(selectedRow, 5);
-        Object email = tableModel.getValueAt(selectedRow, 6);
-        Object gender = tableModel.getValueAt(selectedRow, 7);
-
-        // Update only if the corresponding input field is not empty
-        if (!txtfldDonorId.getText().trim().isEmpty()) {
-            donorId = Integer.valueOf(txtfldDonorId.getText().trim());
-        }
-        if (!txtfldFullName.getText().trim().isEmpty()) {
-            fullname = txtfldFullName.getText().trim();
-        }
-        if (!txtfldAge.getText().trim().isEmpty()) {
-            age = Short.valueOf(txtfldAge.getText().trim());
-        }
-        if (!txtfldContact.getText().trim().isEmpty()) {
-            contact = txtfldContact.getText().trim();
-        }
-        if (!txtfldBloodGroup.getText().trim().isEmpty()) {
-            bloodgroup = txtfldBloodGroup.getText().trim();
-        }
-        if (!txtfldAddress.getText().trim().isEmpty()) {
-            address = txtfldAddress.getText().trim();
-        }
-        if (!txtfldEmail.getText().trim().isEmpty()) {
-            email = txtfldEmail.getText().trim();
-        }
-        if (!txtfldGender.getText().trim().isEmpty()) {
-            gender = txtfldGender.getText().trim();
-        }
-
-        // Update the table with the new values
-        tableModel.setValueAt(donorId, selectedRow, 0);
-        tableModel.setValueAt(fullname, selectedRow, 1);
-        tableModel.setValueAt(age, selectedRow, 2);
-        tableModel.setValueAt(contact, selectedRow, 3);
-        tableModel.setValueAt(bloodgroup, selectedRow, 4);
-        tableModel.setValueAt(address, selectedRow, 5);
-        tableModel.setValueAt(email, selectedRow, 6);
-        tableModel.setValueAt(gender, selectedRow, 7);
-        
-        // Updated message display
-        JOptionPane.showMessageDialog(this, "Updated Successfully");
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Invalid input! Please enter valid numbers for ID and Age.", "Error", JOptionPane.ERROR_MESSAGE);
+    // If any validation fails, show a warning and return
+    if (!isValid) {
+        JOptionPane.showMessageDialog(this, "Please check  highlighted fields and Try Again.!!!", "Error", JOptionPane.WARNING_MESSAGE);
+        return;
     }
-} else {
-    if (tblDonor.getRowCount() == 0) {
-        // If table is empty
-        JOptionPane.showMessageDialog(this, "Table is empty");
+
+    // Proceed to update the table if validations pass
+    DefaultTableModel tableModel = (DefaultTableModel) tblDonor.getModel();
+    if (tblDonor.getSelectedRowCount() == 1) {
+        try {
+            int selectedRow = tblDonor.getSelectedRow();
+
+            // Retrieve existing values for fields which are not updated
+            Object donorId = tableModel.getValueAt(selectedRow, 0);
+            Object fullname = tableModel.getValueAt(selectedRow, 1);
+            Object age = tableModel.getValueAt(selectedRow, 2);
+            Object contact = tableModel.getValueAt(selectedRow, 3);
+            Object bloodgroup = tableModel.getValueAt(selectedRow, 4);
+            Object address = tableModel.getValueAt(selectedRow, 5);
+            Object email = tableModel.getValueAt(selectedRow, 6);
+            Object gender = tableModel.getValueAt(selectedRow, 7);
+
+            // Update only if the corresponding input field is not empty
+            if (!txtFldDonorId.getText().trim().isEmpty()) {
+                donorId = Integer.valueOf(txtFldDonorId.getText().trim());
+            }
+            if (!txtFldFullName.getText().trim().isEmpty()) {
+                fullname = txtFldFullName.getText().trim();
+            }
+            if (!txtFldAge.getText().trim().isEmpty()) {
+                age = Short.valueOf(txtFldAge.getText().trim());
+            }
+            if (!txtFldContact.getText().trim().isEmpty()) {
+                contact = txtFldContact.getText().trim();
+            }
+            if (!txtFldBloodGroup.getText().trim().isEmpty()) {
+                bloodgroup = txtFldBloodGroup.getText().trim();
+            }
+            if (!txtFldAddress.getText().trim().isEmpty()) {
+                address = txtFldAddress.getText().trim();
+            }
+            if (!txtFldEmail.getText().trim().isEmpty()) {
+                email = txtFldEmail.getText().trim();
+            }
+            if (!txtFldGender.getText().trim().isEmpty()) {
+                gender = txtFldGender.getText().trim();
+            }
+
+            // Update the table with the new values
+            tableModel.setValueAt(donorId, selectedRow, 0);
+            tableModel.setValueAt(fullname, selectedRow, 1);
+            tableModel.setValueAt(age, selectedRow, 2);
+            tableModel.setValueAt(contact, selectedRow, 3);
+            tableModel.setValueAt(bloodgroup, selectedRow, 4);
+            tableModel.setValueAt(address, selectedRow, 5);
+            tableModel.setValueAt(email, selectedRow, 6);
+            tableModel.setValueAt(gender, selectedRow, 7);
+
+            // Updated message display
+            JOptionPane.showMessageDialog(this, "Updated Successfully");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, " Please select details row to update.", "Error", JOptionPane.ERROR_MESSAGE); 
+        }
     } else {
-        // If no row or multiple rows are selected
-        JOptionPane.showMessageDialog(this, "Please select a single row to update data.");
+        if (tblDonor.getRowCount() == 0) {
+            // If table is empty
+            JOptionPane.showMessageDialog(this, "Table is empty");
+        } else {
+            // If no row or multiple rows are selected
+            JOptionPane.showMessageDialog(this, "Please select a row to Update Data.");
+        }
     }
-}
+ 
 
-     
-    
-    
         
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+    
+    
+    
     
     
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -1464,7 +1529,8 @@ public class BloodBank extends javax.swing.JFrame {
         if (tblDonor.getSelectedRowCount()==1){
             // if single row is selected than delete 
             tableModel.removeRow(tblDonor.getSelectedRow());
-            
+            JOptionPane.showMessageDialog(this, "Deleted Successfully");
+
         }else{
             if(tblDonor.getRowCount()==0){
                 // if table is empty(no data) than display message 
@@ -1472,49 +1538,146 @@ public class BloodBank extends javax.swing.JFrame {
                 
             }else{
                 // If table is not empty butbrow is not selected or multiple row is selected 
-                JOptionPane.showMessageDialog(this, "Please select any row for Delete.");
+                JOptionPane.showMessageDialog(this, "Please select Row to Delete Info.");
+                
             }
         }
         
         
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void pwfldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwfldPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pwfldPasswordActionPerformed
-
-    private void btnSortDonorIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSortDonorIdActionPerformed
-        // TODO add your handling code here:
-        SelectionSort selectionSot = new SelectionSort();
-        loadListToTable(selectionSort.sortByDonorId(donorList, false));
-  
-       
-    }//GEN-LAST:event_btnSortDonorIdActionPerformed
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-         //Step 1: sorted data
-        
-        SelectionSort selectionSort = new SelectionSort();
-        List<BloodModel> sortedList = selectionSort.sortByFullName(donorList, true);
-        BinarySearch search = new BinarySearch();
-        BloodModel searchedData = search.searchByFullName(txtFldSearch.getText().trim(), sortedList, 0, sortedList.size()-1);
-        if(searchedData!=null){
-            System.out.println(searchedData.getFullName());
-        }else{
-            System.out.println("Sorry");
-        }
-        
     
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void pwFldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwFldPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pwFldPasswordActionPerformed
 
-   
+    private void btnSelectionSortDonorIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectionSortDonorIdActionPerformed
+        // TODO add your handling code here:
+        SelectionSort selectionSort = new SelectionSort();
+        donorListToTable(selectionSort.sortByDonorId(donorList, false));
+     
+    }//GEN-LAST:event_btnSelectionSortDonorIdActionPerformed
+
+    private void btnSearchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchNameActionPerformed
+        // TODO add your handling code here:
+     // Get the search term entered by the user
+        String searchName = txtFldSearch.getText().trim();
+
+        // Clear the existing rows in the table
+        DefaultTableModel model = (DefaultTableModel) tblDonor.getModel();
+        model.setRowCount(0);
+
+        // Check if donorList is initialized and not empty
+        if (donorList == null || donorList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No donor data available.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Sort the donor list by full name (required for binary search)
+        donorList.sort((a1, a2) -> a1.getFullName().compareToIgnoreCase(a2.getFullName()));
+
+        // Perform binary search using the BinarySearch class
+        BloodModel searchDonor = BinarySearch.searchByFullName(searchName, donorList, 0, donorList.size() - 1);
+
+        // If a matching donor is found, add their details to the table
+        if (searchDonor != null) {
+            model.addRow(new Object[]{
+                searchDonor.getDonorId(),
+                searchDonor.getFullName(),
+                searchDonor.getAge(),
+                searchDonor.getContact(),
+                searchDonor.getBloodGroup(),
+                searchDonor.getAddress(),
+                searchDonor.getEmail(),
+                searchDonor.getGender()
+            });
+        } else {
+            // Showing a message if no matching records are found
+            JOptionPane.showMessageDialog(null, "No donor details found for: " + searchName, "Search Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    
+    
+    }//GEN-LAST:event_btnSearchNameActionPerformed
+
+    private void btnInsertionSortAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertionSortAddressActionPerformed
+        // TODO add your handling code here:
+     InsertionSort insertionSort = new InsertionSort();
+     donorListToTable(insertionSort.sortByAddress(donorList, false));
+
+    }//GEN-LAST:event_btnInsertionSortAddressActionPerformed
+
+  
+    
+
+    
+  
+    private void btnMergeSortAgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMergeSortAgeActionPerformed
+        // TODO add your handling code here:
+        MergeSort mergeSort = new MergeSort();
+        donorListToTable(mergeSort.mergeSortByAge(donorList, false)); // Sort by age in ascending order
+
+         
+    }//GEN-LAST:event_btnMergeSortAgeActionPerformed
+
+    
+    
+    private void tblDonorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDonorMouseClicked
+        // TODO add your handling code here:
+                                          
+       // Check if a row is selected
+        int selectedRow = tblDonor.getSelectedRow();
+        if (selectedRow != -1) {
+        try {
+            // Get the table model
+            DefaultTableModel tableModel = (DefaultTableModel) tblDonor.getModel();
+
+            // Retrieve data from the selected row
+            int donorId = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+            String fullName = tableModel.getValueAt(selectedRow, 1).toString();
+            short age = Short.parseShort(tableModel.getValueAt(selectedRow, 2).toString());
+            String contact = tableModel.getValueAt(selectedRow, 3).toString();
+            String bloodGroup = tableModel.getValueAt(selectedRow, 4).toString();
+            String address = tableModel.getValueAt(selectedRow, 5).toString();
+            String email = tableModel.getValueAt(selectedRow, 6).toString();
+            String gender = tableModel.getValueAt(selectedRow, 7).toString();
+
+            // Setting the data to the corresponding text fields
+            txtFldDonorId.setText(String.valueOf(donorId));
+            txtFldFullName.setText(fullName);
+            txtFldAge.setText(String.valueOf(age));
+            txtFldContact.setText(contact);
+            txtFldBloodGroup.setText(bloodGroup);
+            txtFldAddress.setText(address);
+            txtFldEmail.setText(email);
+            txtFldGender.setText(gender);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid data format. Please check the table.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while retrieving data.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a single row.", "Error", JOptionPane.WARNING_MESSAGE);
+    }
+
+    }//GEN-LAST:event_tblDonorMouseClicked
+
+  
+    private void txtFldFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFldFullNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFldFullNameActionPerformed
+
+
+    
+    
+    
+    
+    
     
    /**
-     * Checks whether a student with the same LMU ID already exists in the
-     * student list.
+     * Checks whether a donor with the same Donor ID already exists in the
+     * donor list.
      *
-     * @param student the StudentModel object to check for duplicates
+     * @param donor the DonorModel object to check for duplicates
      * @return true if a duplicate is found, false otherwise
      */
     private boolean checkDuplicateDonor(BloodModel donor) {
@@ -1560,39 +1723,41 @@ public class BloodBank extends javax.swing.JFrame {
          bank.setVisible(true);
             
         });
-        bank.startProgress();
+        bank.runProgress();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInsertionSortAddress;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnLogout;
-    private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnSortDonorId;
+    private javax.swing.JButton btnMergeSortAge;
+    private javax.swing.JButton btnSearchName;
+    private javax.swing.JButton btnSelectionSortDonorId;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JLabel lblAddress;
     private javax.swing.JLabel lblAddressDetail;
     private javax.swing.JLabel lblAdminLogo;
-    private javax.swing.JLabel lblAge;
-    private javax.swing.JLabel lblBloodGroup;
     private javax.swing.JLabel lblBloodLogo;
     private javax.swing.JLabel lblCallIcon;
     private javax.swing.JLabel lblCallUs;
     private javax.swing.JLabel lblCallingDetails;
-    private javax.swing.JLabel lblContact;
     private javax.swing.JLabel lblContactUs;
     private javax.swing.JLabel lblDonateImg;
     private javax.swing.JLabel lblDonorData;
-    private javax.swing.JLabel lblDonorId;
-    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblErrorAddress;
+    private javax.swing.JLabel lblErrorAge;
+    private javax.swing.JLabel lblErrorBloodGroup;
+    private javax.swing.JLabel lblErrorContact;
+    private javax.swing.JLabel lblErrorDonorId;
+    private javax.swing.JLabel lblErrorEmail;
+    private javax.swing.JLabel lblErrorFullName;
+    private javax.swing.JLabel lblErrorGender;
     private javax.swing.JLabel lblErrorLogin;
     private javax.swing.JLabel lblFooterTitle;
     private javax.swing.JLabel lblFooterTitle1;
     private javax.swing.JLabel lblForgetPassword;
-    private javax.swing.JLabel lblFullName;
-    private javax.swing.JLabel lblGender;
     private javax.swing.JLabel lblHandImg;
     private javax.swing.JLabel lblHeadingTitle;
     private javax.swing.JLabel lblHeadingTitle1;
@@ -1620,30 +1785,30 @@ public class BloodBank extends javax.swing.JFrame {
     private javax.swing.JPanel pnlContactDetails;
     private javax.swing.JPanel pnlContactUs;
     private javax.swing.JPanel pnlDetails;
+    private javax.swing.JPanel pnlDonorDashBoard;
     private javax.swing.JPanel pnlDonorData;
     private javax.swing.JPanel pnlDonorList;
+    private javax.swing.JPanel pnlDonorLogin;
     private javax.swing.JPanel pnlHome;
     private javax.swing.JPanel pnlImgDonate;
-    private javax.swing.JPanel pnlLoadingScreen;
     private javax.swing.JPanel pnlLogin;
-    private javax.swing.JPanel pnlLoginScreen;
     private javax.swing.JPanel pnlMainBar;
-    private javax.swing.JPanel pnlMainScreen;
     private javax.swing.JPanel pnlMiddleHome;
     private javax.swing.JPanel pnlRightLogin;
-    private javax.swing.JPasswordField pwfldPassword;
+    private javax.swing.JPanel pnlWelcomeScreen;
+    private javax.swing.JPasswordField pwFldPassword;
     private javax.swing.JScrollPane spTblDonor;
     private javax.swing.JTabbedPane tabPanMain;
     private javax.swing.JTable tblDonor;
+    private javax.swing.JTextField txtFldAddress;
+    private javax.swing.JTextField txtFldAge;
+    private javax.swing.JTextField txtFldBloodGroup;
+    private javax.swing.JTextField txtFldContact;
+    private javax.swing.JTextField txtFldDonorId;
+    private javax.swing.JTextField txtFldEmail;
+    private javax.swing.JTextField txtFldFullName;
+    private javax.swing.JTextField txtFldGender;
     private javax.swing.JTextField txtFldSearch;
-    private javax.swing.JTextField txtfldAddress;
-    private javax.swing.JTextField txtfldAge;
-    private javax.swing.JTextField txtfldBloodGroup;
-    private javax.swing.JTextField txtfldContact;
-    private javax.swing.JTextField txtfldDonorId;
-    private javax.swing.JTextField txtfldEmail;
-    private javax.swing.JTextField txtfldFullName;
-    private javax.swing.JTextField txtfldGender;
-    private javax.swing.JTextField txtfldUsername;
+    private javax.swing.JTextField txtFldUsername;
     // End of variables declaration//GEN-END:variables
 }

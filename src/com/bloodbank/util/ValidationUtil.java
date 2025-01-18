@@ -4,21 +4,21 @@ package com.bloodbank.util;
 import java.util.regex.Pattern;
 
 /**
- *
- * @author prabinkumargupta
+ * Utility class for validating input text fields.
+ * 
+ * @author Prabin Kumar Gupta
  * LMU ID: 23048504
  */
 public class ValidationUtil {
-    
-  
+
     // Regular expression patterns
-    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z\\s]+$");
-    private static final Pattern DONOR_ID_PATTERN = Pattern.compile("^[0-4]+$"); // Assuming numeric IDs
-    private static final Pattern CONTACT_PATTERN = Pattern.compile("^\\d{10}$"); // Assuming 10-digit contact numbers
-    private static final Pattern BLOOD_GROUP_PATTERN = Pattern.compile("^(A|B|AB|O)[+-]$");
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z\\s]+$"); // Allows alphabets and spaces
+    private static final Pattern DONOR_ID_PATTERN = Pattern.compile("^\\d{4}$"); // Ensures exactly 4-digit numeric IDs
+    private static final Pattern CONTACT_PATTERN = Pattern.compile("^98\\d{8}$"); // Nepal-specific 10-digit numbers starting with 98
+    private static final Pattern BLOOD_GROUP_PATTERN = Pattern.compile("^(A|B|AB|O)[+-]$"); // Valid blood groups with +/-
     private static final Pattern ADDRESS_PATTERN = Pattern.compile("^[a-zA-Z0-9\\s,.-]+$"); // Basic address validation
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,4}$");
-    private static final Pattern GENDER_PATTERN = Pattern.compile("^(Male|Female|Other)$");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,4}$"); // Email validation
+    private static final Pattern GENDER_PATTERN = Pattern.compile("^(Male|Female|Other)$"); // Valid gender options
 
     /**
      * Validates if a string is null or empty.
@@ -41,7 +41,7 @@ public class ValidationUtil {
     }
 
     /**
-     * Validates if the donor ID is numeric.
+     * Validates if the donor ID is a 4-digit numeric value.
      *
      * @param donorId the donor ID to validate
      * @return true if valid, otherwise false
@@ -51,7 +51,7 @@ public class ValidationUtil {
     }
 
     /**
-     * Validates if the contact number has 10 digits.
+     * Validates if the contact number has 10 digits and starts with 98 (Nepal-specific).
      *
      * @param contact the contact number to validate
      * @return true if valid, otherwise false
@@ -61,7 +61,7 @@ public class ValidationUtil {
     }
 
     /**
-     * Validates if the blood group is one of the accepted formats.
+     * Validates if the blood group is one of the accepted formats (A+, A-, B+, etc.).
      *
      * @param bloodGroup the blood group to validate
      * @return true if valid, otherwise false
@@ -71,7 +71,7 @@ public class ValidationUtil {
     }
 
     /**
-     * Validates if the address is properly formatted.
+     * Validates if the address is properly formatted (allows alphanumerics, spaces, commas, periods, and hyphens).
      *
      * @param address the address to validate
      * @return true if valid, otherwise false
@@ -91,13 +91,13 @@ public class ValidationUtil {
     }
 
     /**
-     * Validates if the age is between 18 and 70 (inclusive).
+     * Validates if the age is between 18 and 40 (inclusive).
      *
      * @param age the age to validate
      * @return true if valid, otherwise false
      */
     public static boolean isValidAge(short age) {
-        return age >= 18 && age <= 40;
+        return age >= 18 && age <= 50;
     }
 
     /**

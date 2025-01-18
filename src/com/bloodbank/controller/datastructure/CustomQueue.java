@@ -26,7 +26,7 @@ import java.util.LinkedList;
  */
 public class CustomQueue {
     
-    private LinkedList<BloodModel> vivaList; //Internal Storage for queue.
+    private LinkedList<BloodModel> donorList; //Internal Storage for queue.
     private int capacity;
     
     /**
@@ -40,21 +40,21 @@ public class CustomQueue {
         if (capacity <=0) {
             throw new IllegalArgumentException("Capacity should be greater than zero.");
         }
-        vivaList = new LinkedList<>();
+        donorList = new LinkedList<>();
         this.capacity = capacity;
     }
     
     /**
      * Removes and returns the first element from the queue.
      *
-     * @return the first DonorModel in the queue, or null if the queue is
+     * @return the first BloodModel in the queue, or null if the queue is
      * empty.
      * @throws IllegalStateException if the queue is empty.
      */
     
     public BloodModel deQueue() {
         try{
-            return vivaList.removeFirst();
+            return donorList.removeFirst();
             
         }catch (Exception ex) {
             throw new IllegalStateException("Cannot remove from empty queue."); // Shows that the queue is full
@@ -78,8 +78,8 @@ public class CustomQueue {
           if (isFull ()) {
               throw new IllegalStateException("Cannot peek into an empty queue."); // Indicates the queue is full
      }
-      vivaList.addLast(bloodModel);
-      return vivaList.size();
+      donorList.addLast(bloodModel);
+      return donorList.size();
      }
      
      /**
@@ -89,19 +89,19 @@ public class CustomQueue {
      */
      
      public int poll() {
-        return vivaList.size();
+        return donorList.size();
     }
      
      /**
      * Retrieves, but does not remove, the first element of the queue.
      *
-     * @return the first StudentModel in the queue, or null if the queue is
+     * @return the first BloodModel in the queue, or null if the queue is
      * empty.
      * @throws IllegalStateException if the queue is empty.
      */
     public BloodModel peek() {
         try{
-            return vivaList.getFirst();
+            return donorList.getFirst();
         }catch (Exception ex) {
             throw new IllegalStateException("Cannot peek into an empty queue.");
         }
@@ -114,7 +114,7 @@ public class CustomQueue {
      * @return true if the queue contains no elements, false otherwise.
      */
     public boolean isEmpty() {
-        return vivaList.isEmpty();
+        return donorList.isEmpty();
     }
      
      
@@ -127,7 +127,7 @@ public class CustomQueue {
      * @return true if the queue has reached its capacity, false otherwise.
      */
     public boolean isFull() {
-        return vivaList.size() == capacity;
+        return donorList.size() == capacity;
     }
      }
 
